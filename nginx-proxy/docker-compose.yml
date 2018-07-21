@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+  jira:
+    image: cptactionhank/atlassian-jira
+    container_name: jira
+    networks:
+      - jiranet
+    volumes:
+      - jiradata:/var/atlassian/jira
+    environment:
+       - JIRA_DATABASE_URL=postgresql://jira@postgresql/jiradb
+       - JIRA_DB_PASSWORD=jellyfish
+       - CATALINA_OPTS= -Xms256m -Xmx1g
+       - DOCKER_WAIT_HOST=postgresql
+       - DOCKER_WAIT_PORT=5432
+    links:
+      - 'postgresql:postgresql'
+    labels:
+      com.blacklabelops.description: "Atlassian Jira"
+      com.blacklabelops.service: "jira"
+
+
+  confluence:
+    image: cptactionhank/atlassian-confluence
+    container_name: confluence
+    hostname: confluence
+    networks:
+      - jiranet
+    volumes:
+      - confluencedata:/var/atlassian/confluence
+    environment:
+      - CATALINA_OPTS= -Xms256m -Xmx1g
+
+    links:
+      - postgresql:postgresql
+    labels:
+      com.blacklabelops.description: "Atlassian Confluence"
+      com.blacklabelops.service: "confluence"
+
+
+  postgresql:
+    image: postgres
+    hostname: postgresql
+    networks:
+      - jiranet
+    volumes:
+      - postgresqldata:/var/lib/postgresql/data
+    environment:
+       - POSTGRES_USER=jira
+      # CHANGE THE PASSWORD!
+       - POSTGRES_PASSWORD=jellyfish
+       - POSTGRES_DB=jiradb
+       - POSTGRES_ENCODING=UNICODE
+       - POSTGRES_COLLATE=C
+       - POSTGRES_COLLATE_TYPE=C
+    labels:
+      com.blacklabelops.description: "PostgreSQL Database Server"
+      com.blacklabelops.service: "postgresql"
+
+  nginx:
+    image: nginx:1.13
+    networks:
+      - jiranet
+    ports:
+      - 80:80
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+    depends_on:
+      - jira
+
+volumes:
+  jiradata:
+    external: false
+  postgresqldata:
+    external: false
+  confluencedata:
+    external: false
+
+networks:
+  jiranet:
+    driver: bridge
+
