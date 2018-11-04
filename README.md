@@ -1,17 +1,23 @@
-# docker-test
-Мое тестовое задание
-Суть тестовонго задания такова: 
-1. Необходимо установить Docker + Docker-compose
-2. Необходимо настроить service jira, confluence в docker-compose.yml, что бы можно было подключиться к обоим сервисам по dns. Настроить синхронизацию между jira, confluence
+# jira + confluence via docker-compose
 
-Справится с первым заданием не составило сбольшего труда. Для установки Docker я выбрал Cent OS, считая что именно для Red Hat производных его поддержка наилучшая.  
-Как я это делал можно почитать [тут](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-centos-7)
+Plan of steps:
+1. You must install Docker + Docker-compose
+2. You need to configure service jira, confluence in docker-compose.yml, so that you can connect to both services via dns. Set up sync between jira, confluence
 
-Вторую задачу можно разбить на несколько подзадач: 
-1. Запуск прокси
-В производственных средах обычной практикой является запуск контейнера на порт 80 и использование присвоенного DNS имени.
-Вы можете запустить Jira за прокси-сервером, и вы можете запускать другие приложения на одном и том же хосте Docker, например, Confluence.
-<p align="center">
-  <img src="https://github.com/eleutherius/docker-test/raw/master/docker-proxy.png" width="666"/>
-</p>
-Чтобы это стало проще, вы можете запустить этот контейнер с переменной среды VIRTUAL_HOST. Эта переменная изменит конфигурацию сервера Tomcat для прокси-запроса.
+Cope with the first task was not with great difficulty. To install Docker, I chose Cent OS, considering that it is for Red Hat derivatives that its support is the best.
+How I did it you can read [here] (https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-centos-7)
+
+The second task can be divided into several subtasks:
+1. Run proxy
+In production environments, it is common practice to launch a container on port 80 and use the assigned DNS name.
+You can run Jira behind a proxy server, and you can run other applications on the same Docker host, for example, Confluence.
+<p align = "center">
+  <img src = "https://github.com/eleutherius/docker-test/raw/master/docker-proxy.png" width = "666" />
+</ p>
+To make it easier, you can run this container with the VIRTUAL_HOST environment variable. This variable will change the Tomcat server configuration for the proxy request.
+
+## How to start ? 
+
+```
+docker-compose up -d -f
+```
