@@ -14,10 +14,11 @@ You can run Jira behind a proxy server, and you can run other applications on th
 <p align = "center">
   <img src = "https://github.com/eleutherius/docker-test/raw/master/docker-proxy.png" width = "666" />
 </ p>
+
 To make it easier, you can run this container with the VIRTUAL_HOST environment variable. This variable will change the Tomcat server configuration for the proxy request.
 
 ## How to start ? 
 
 ```
-docker-compose up -d -f
+docker-compose up -d --f
 ```
